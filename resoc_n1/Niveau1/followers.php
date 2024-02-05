@@ -25,14 +25,30 @@
 
             </nav>
         </header>
-        <div id="wrapper">          
+        <div id="wrapper"> 
+            <?php
+                $userId = intval($_GET['user_id']);
+            ?>
+            <?php
+                include 'connexion.php';
+            ?>         
             <aside>
+            
+            <?php
+                $laQuestionEnSql = "SELECT * FROM `users` WHERE id= '$userId' ";
+                $lesInformations = $mysqli->query($laQuestionEnSql);
+                $user = $lesInformations->fetch_assoc();
+                ?>
                 <img src = "user.jpg" alt = "Portrait de l'utilisatrice"/>
                 <section>
                     <h3>Présentation</h3>
+                    <!-- changer par le nom de l'utilisateurice -->
                     <p>Sur cette page vous trouverez la liste des personnes qui
-                        suivent les messages de l'utilisatrice
-                        n° <?php echo intval($_GET['user_id']) ?></p>
+                        suivent les messages de <?php echo $user['alias'] ?></p>
+                        <!-- <?php  (['label']) ?> -->
+                        
+                        
+                        
 
                 </section>
             </aside>
@@ -42,7 +58,7 @@
                 $userId = intval($_GET['user_id']);
                 // Etape 2: se connecter à la base de donnée
                 // $mysqli = new mysqli("localhost", "root", "root", "socialnetwork");
-                include 'connexion.php';
+                
                 // Etape 3: récupérer le nom de l'utilisateur
                 $laQuestionEnSql = "
                     SELECT users.*
@@ -56,7 +72,6 @@
                 //@todo: faire la boucle while de parcours des abonnés et mettre les bonnes valeurs ci dessous 
                 while ($post = $lesInformations->fetch_assoc()) {
                     
-                    echo "<pre>" . print_r($post, 1) . "</pre>";
                     ?>
                               
                 <article>
@@ -64,7 +79,7 @@
                     <h3>
                         <?php echo $post['alias'] ?></time>
                     </h3>
-                    <p><?php echo $post['id'] ?></p>  
+                    <!-- <p><?php echo $post['id'] ?></p>   -->
                 </article>
                
                 <?php

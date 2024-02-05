@@ -94,7 +94,7 @@
                  */
                 while ($tag = $lesInformations->fetch_assoc())
                 {
-                    echo "<pre>" . print_r($tag, 1) . "</pre>";
+                    // echo "<pre>" . print_r($tag, 1) . "</pre>";
                     ?>
                        <!-- [id] => 1
                         [email] => ada@test.org
