@@ -54,12 +54,23 @@
                 $lesInformations = $mysqli->query($laQuestionEnSql);
                 // Etape 4: à vous de jouer
                 //@todo: faire la boucle while de parcours des abonnés et mettre les bonnes valeurs ci dessous 
-                ?>
+                while ($post = $lesInformations->fetch_assoc()) {
+                    
+                    echo "<pre>" . print_r($post, 1) . "</pre>";
+                    ?>
+                              
                 <article>
                     <img src="user.jpg" alt="blason"/>
-                    <h3>Béatrice</h3>
-                    <p>id:321</p>
+                    <h3>
+                        <?php echo $post['alias'] ?></time>
+                    </h3>
+                    <p><?php echo $post['id'] ?></p>  
                 </article>
+               
+                <?php
+                // et de pas oublier de fermer ici vote while
+            }
+            ?>
             </main>
         </div>
     </body>
