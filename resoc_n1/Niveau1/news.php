@@ -114,7 +114,7 @@
                             <small>♥ <?php echo $post['like_number'] ?> </small>
                             <a href=""><?php $hastag=explode("," ,$post['taglist']);
                             foreach ($hastag as $tag) 
-                            echo  '#' . $tag . " "?></a>,
+                            echo  '#' . $tag . " "?></a>
                         </footer>
                     </article>
                     <?php
