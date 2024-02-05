@@ -112,7 +112,9 @@
                         </div>
                         <footer>
                             <small>♥ <?php echo $post['like_number'] ?> </small>
-                            <a href=""><?php echo  '#' . $post['taglist'] ?></a>,
+                            <a href=""><?php $hastag=explode("," ,$post['taglist']);
+                            foreach ($hastag as $tag) 
+                            echo  '#' . $tag . " "?></a>,
                         </footer>
                     </article>
                     <?php
