@@ -65,9 +65,25 @@ $authorId = $_SESSION['connected_id'];
             <img src="user.jpg" alt="Portrait de l'utilisatrice" />
             <section>
                 <h3>Présentation</h3>
+                <?php
+                if ($authorId != $userId) {
+                    $laQuestionEnSql = "SELECT * FROM followers WHERE following_user_id= '$authorId' AND = '$userId' ";
+                    $lesInformations = $mysqli->query($laQuestionEnSql);
+                    $user = $lesInformations->fetch_assoc();
+                    if ($user) {
+                        echo "<p>Vous êtes abonné.e à cette personne</p>";
+                    } else {
+                        echo "<p>Vous n'êtes pas abonné.e à cette personne</p>";
+                    }
+                }
+                ?>
+                <form action="wall.php" method="post">
+                    <button type="submit">S'abonner</button>
+                </form>
                 <p>Sur cette page vous trouverez tous les messages de l'utilisateurice : <a href="wall.php?user_id=<?php echo $user['id'] ?>"> <?php echo $user['alias'] ?> </a>
                     <!-- (n° <?php $userId ?>) -->
                 </p>
+
             </section>
         </aside>
         <main>
@@ -148,7 +164,7 @@ $authorId = $_SESSION['connected_id'];
                         }
                     }
                     ?>
-                    <form action="usurpedpost.php" method="post">
+                    <form action="wall.php" method="post">
                         <dl>
                             <dt><label for='message'>Message</label></dt>
                             <dd><textarea name='message'></textarea></dd>

@@ -1,5 +1,6 @@
 <?php
 session_start();
+$authorId = $_SESSION['connected_id'];
 ?>
 <!doctype html>
 <html lang="fr">
@@ -16,8 +17,8 @@ session_start();
         <img src="resoc.jpg" alt="Logo de notre réseau social" />
         <nav id="menu">
             <a href="news.php">Actualités</a>
-            <a href="wall.php?user_id=5">Mur</a>
-            <a href="feed.php?user_id=5">Flux</a>
+            <a href="wall.php?user_id=<?php echo $authorId ?>">Mur</a>
+            <a href="feed.php?user_id=<?php echo $authorId ?>">Flux</a>
             <a href="tags.php?tag_id=1">Mots-clés</a>
         </nav>
         <nav id="user">
@@ -41,6 +42,7 @@ session_start();
             <article>
                 <h2>Connexion</h2>
                 <?php
+
                 /**
                  * TRAITEMENT DU FORMULAIRE
                  */
@@ -51,7 +53,7 @@ session_start();
                     // on ne fait ce qui suit que si un formulaire a été soumis.
                     // Etape 2: récupérer ce qu'il y a dans le formulaire @todo: c'est là que votre travaille se situe
                     // observez le résultat de cette ligne de débug (vous l'effacerez ensuite)
-                    echo "<pre>" . print_r($_POST, 1) . "</pre>";
+                    // echo "<pre>" . print_r($_POST, 1) . "</pre>";
                     // et complétez le code ci dessous en remplaçant les ???
                     $emailAVerifier = $_POST['email'];
                     $passwdAVerifier = $_POST['motpasse'];
@@ -80,7 +82,9 @@ session_start();
                         echo "Votre connexion est un succès : " . $user['alias'] . ".";
                         // Etape 7 : Se souvenir que l'utilisateur s'est connecté pour la suite
                         // documentation: https://www.php.net/manual/fr/session.examples.basic.php
+                        unset($_SESSION['connected_id']);
                         $_SESSION['connected_id'] = $user['id'];
+                        header('Location: wall.php?user_id=' . $user['id']);
                     }
                 }
                 ?>
