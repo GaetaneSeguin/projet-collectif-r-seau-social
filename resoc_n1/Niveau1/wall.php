@@ -1,5 +1,6 @@
 <?php
 session_start();
+$authorId = $_SESSION['connected_id'];
 ?>
 
 <!doctype html>
@@ -17,8 +18,8 @@ session_start();
         <img src="resoc.jpg" alt="Logo de notre réseau social" />
         <nav id="menu">
             <a href="news.php">Actualités</a>
-            <a href="wall.php?user_id=5">Mur</a>
-            <a href="feed.php?user_id=5">Flux</a>
+            <a href="wall.php?user_id=<?php echo $authorId ?>">Mur</a>
+            <a href="feed.php?user_id=<?php echo $authorId ?>">Flux</a>
             <a href="tags.php?tag_id=1">Mots-clés</a>
         </nav>
         <nav id="user">
@@ -34,6 +35,7 @@ session_start();
 
     <div id="wrapper">
         <?php
+
         /**
          * Etape 1: Le mur concerne un utilisateur en particulier
          * La première étape est donc de trouver quel est l'id de l'utilisateur
@@ -114,7 +116,6 @@ session_start();
                 </article>
             <?php } ?>
             <?php
-            $authorId = $_SESSION['connected_id'];
             if ($userId == $authorId) {
             ?>
                 <article>

@@ -1,3 +1,8 @@
+<?php
+session_start();
+$authorId = $_SESSION['connected_id'];
+?>
+
 <!doctype html>
 <html lang="fr">
 
@@ -13,8 +18,8 @@
         <img src="resoc.jpg" alt="Logo de notre réseau social" />
         <nav id="menu">
             <a href="news.php">Actualités</a>
-            <a href="wall.php?user_id=5">Mur</a>
-            <a href="feed.php?user_id=5">Flux</a>
+            <a href="wall.php?user_id=<?php echo $authorId ?>">Mur</a>
+            <a href="feed.php?user_id=<?php echo $authorId ?>">Flux</a>
             <a href="tags.php?tag_id=1">Mots-clés</a>
         </nav>
         <nav id="user">
@@ -60,8 +65,8 @@
             <img src="user.jpg" alt="Portrait de l'utilisatrice" />
             <section>
                 <h3>Présentation</h3>
-                <p>Sur cette page vous trouverez tous les message des utilisatrices
-                    auxquel est abonnée l'utilisateurice <a href="wall.php?user_id=<?php echo $user['id'] ?>"> <?php echo $user['alias'] ?> </a>
+                <p>Sur cette page vous trouverez tous les message des utilisateurices
+                    auxquel est abonnée <a href="wall.php?user_id=<?php echo $user['id'] ?>"> <?php echo $user['alias'] ?> </a>
                     <!-- (n° <?php $userId ?>) -->
                 </p>
 
