@@ -1,0 +1,8 @@
+node_modules/
+
+.DS_Store
+
+# Fichiers de configuration de package NPM
+package-lock.json
+
+.prettierrc

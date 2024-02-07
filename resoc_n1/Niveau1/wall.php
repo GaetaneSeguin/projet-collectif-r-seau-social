@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!doctype html>
 <html lang="fr">
 
@@ -66,6 +70,7 @@
         </aside>
         <main>
             <?php
+
             /**
              * Etape 3: récupérer tous les messages de l'utilisatrice
              */
@@ -93,7 +98,7 @@
             ?>
                 <article>
                     <h3>
-                        <time datetime='2020-02-01 11:12:13'>31 février 2010 à 11h12</time>
+                        <time><?php echo $post['created'] ?></time>
                     </h3>
                     <address>par <?php echo $post['author_name'] ?></address>
                     <div>
@@ -108,6 +113,53 @@
                     </footer>
                 </article>
             <?php } ?>
+            <?php
+            $authorId = $_SESSION['connected_id'];
+            if ($userId == $authorId) {
+            ?>
+                <article>
+                    <h2>Poster un message</h2>
+                    <?php
+
+                    ini_set('display_errors', 1);
+                    ini_set('display_startup_errors', 1);
+                    error_reporting(E_ALL);
+                    include 'connexion.php';
+
+
+                    $enCoursDeTraitement = isset($_POST['message']);
+                    if ($enCoursDeTraitement) {
+
+
+                        $postContent = $_POST['message'];
+
+                        $authorId = intval($mysqli->real_escape_string($authorId));
+                        $postContent = $mysqli->real_escape_string($postContent);
+
+                        $laQuestionEnSql = "INSERT INTO posts (user_id, content, created, parent_id) VALUES ($authorId, '$postContent', NOW(), NULL);";
+
+                        // Etape 5 : execution
+                        $ok = $mysqli->query($laQuestionEnSql);
+                        if (!$ok) {
+                            echo "Impossible d'ajouter le message: " . $mysqli->error;
+                        } else {
+                            echo "Message posté en tant que : " . $authorId;
+                        }
+                    }
+                    ?>
+                    <form action="usurpedpost.php" method="post">
+                        <dl>
+                            <dt><label for='message'>Message</label></dt>
+                            <dd><textarea name='message'></textarea></dd>
+                        </dl>
+                        <input type='submit'>
+                    </form>
+                </article>
+            <?php
+            } else {
+                echo "<a href='admin.php?user_id=5'>Administration</a>";
+            }
+            ?>
 
 
         </main>
