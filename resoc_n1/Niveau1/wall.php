@@ -71,26 +71,29 @@ $currentId = $_SESSION['connected_id'];
                     $lesInformations = $mysqli->query($laQuestionEnSql);
                     $follow = $lesInformations->fetch_assoc();
                     if (!$follow) {
-                        echo "<p>Vous n'êtes pas abonné.e à cette personne</p>";?>
-                        <form action="wall.php" method="post">
-                        <button type="submit">S'abonner</button>
+                        ?>
+                        <form method="post">
+                            <input type="hidden" name="formFollow" value="formFollowValue">
+                            <button action= "wall.php?user_id=<?php echo $wallUserId ?>" type="submit">S'abonner</button>
                         </form>
                     <?php
                         if ($_SERVER["REQUEST_METHOD"]=="POST"){
-                            $setTableFollowersSql = "INSERT INTO followers (followed_user_id, following_user_id) 
-                            VALUES ($currentId, '$wallUserId');";
-                            $setOk = $mysqli->query($setTableFollowersSql);
-                            if (!$setOk) {
-                                echo "Impossible d'ajouter le message: " . $mysqli->error;
-                            } else {
-                                echo "vous êtes abonné.e";
+                            if ($_POST['formFollow']=="formFollowValue"){
+                                $setTableFollowersSql = "INSERT INTO followers (followed_user_id, following_user_id) 
+                                VALUES ($currentId, $wallUserId);";
+                                $setOk = $mysqli->query($setTableFollowersSql);
+                                if (!$setOk) {
+                                    echo "Impossible d'ajouter le message: " . $mysqli->error;
+                                } else {
+                                    header("Refresh:0");
+                                } 
                             }
-                    
                         }
+                    }else{
+                        echo "vous êtes abonné.e";
                     }
                         
                 }
-                
                 ?>
                 
                 <p>Sur cette page vous trouverez tous les messages de l'utilisateurice : <a href="wall.php?user_id=<?php echo $user['id'] ?>"> <?php echo $user['alias'] ?> </a>
@@ -173,11 +176,12 @@ $currentId = $_SESSION['connected_id'];
                         if (!$ok) {
                             echo "Impossible d'ajouter le message: " . $mysqli->error;
                         } else {
-                            echo "Message posté en tant que : " . $currentId;
+                            header("Refresh:0");
+                            
                         }
                     }
                     ?>
-                    <form action="wall.php" method="post">
+                    <form method="post">
                         <dl>
                             <dt><label for='message'>Message</label></dt>
                             <dd><textarea name='message'></textarea></dd>

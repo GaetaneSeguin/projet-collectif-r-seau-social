@@ -82,7 +82,7 @@ $authorId = $_SESSION['connected_id'];
                     LEFT JOIN likes      ON likes.post_id  = posts.id 
                     GROUP BY posts.id
                     ORDER BY posts.created DESC  
-                    LIMIT 5
+                    LIMIT 10
                     ";
             $lesInformations = $mysqli->query($laQuestionEnSql);
             // Vérification
