@@ -1,6 +1,6 @@
 <?php
 session_start();
-$authorId = $_SESSION['connected_id'];
+$currentId = $_SESSION['connected_id'];
 ?>
 
 <!doctype html>
@@ -18,8 +18,8 @@ $authorId = $_SESSION['connected_id'];
         <img src="resoc.jpg" alt="Logo de notre réseau social" />
         <nav id="menu">
             <a href="news.php">Actualités</a>
-            <a href="wall.php?user_id=<?php echo $authorId ?>">Mur</a>
-            <a href="feed.php?user_id=<?php echo $authorId ?>">Flux</a>
+            <a href="wall.php?user_id=<?php echo $currentId ?>">Mur</a>
+            <a href="feed.php?user_id=<?php echo $currentId ?>">Flux</a>
             <a href="tags.php?tag_id=1">Mots-clés</a>
         </nav>
         <nav id="user">
@@ -43,7 +43,7 @@ $authorId = $_SESSION['connected_id'];
          * Documentation : https://www.php.net/manual/fr/reserved.variables.get.php
          * ... mais en résumé c'est une manière de passer des informations à la page en ajoutant des choses dans l'url
          */
-        $userId = intval($_GET['user_id']);
+        $wallUserId = intval($_GET['user_id']);
         ?>
         <?php
         /**
@@ -57,7 +57,7 @@ $authorId = $_SESSION['connected_id'];
             /**
              * Etape 3: récupérer le nom de l'utilisateur
              */
-            $laQuestionEnSql = "SELECT * FROM users WHERE id= '$userId' ";
+            $laQuestionEnSql = "SELECT * FROM users WHERE id= '$wallUserId' ";
             $lesInformations = $mysqli->query($laQuestionEnSql);
             $user = $lesInformations->fetch_assoc();
             //@todo: afficher le résultat de la ligne ci dessous, remplacer XXX par l'alias et effacer la ligne ci-dessous
@@ -66,22 +66,35 @@ $authorId = $_SESSION['connected_id'];
             <section>
                 <h3>Présentation</h3>
                 <?php
-                if ($authorId != $userId) {
-                    $laQuestionEnSql = "SELECT * FROM followers WHERE following_user_id= '$authorId' AND = '$userId' ";
+                if ($currentId != $wallUserId) {
+                    $laQuestionEnSql = "SELECT * FROM followers WHERE following_user_id= '$wallUserId' AND followed_user_id = '$currentId' ";
                     $lesInformations = $mysqli->query($laQuestionEnSql);
-                    $user = $lesInformations->fetch_assoc();
-                    if ($user) {
-                        echo "<p>Vous êtes abonné.e à cette personne</p>";
-                    } else {
-                        echo "<p>Vous n'êtes pas abonné.e à cette personne</p>";
+                    $follow = $lesInformations->fetch_assoc();
+                    if (!$follow) {
+                        echo "<p>Vous n'êtes pas abonné.e à cette personne</p>";?>
+                        <form action="wall.php" method="post">
+                        <button type="submit">S'abonner</button>
+                        </form>
+                    <?php
+                        if ($_SERVER["REQUEST_METHOD"]=="POST"){
+                            $setTableFollowersSql = "INSERT INTO followers (followed_user_id, following_user_id) 
+                            VALUES ($currentId, '$wallUserId');";
+                            $setOk = $mysqli->query($setTableFollowersSql);
+                            if (!$setOk) {
+                                echo "Impossible d'ajouter le message: " . $mysqli->error;
+                            } else {
+                                echo "vous êtes abonné.e";
+                            }
+                    
+                        }
                     }
+                        
                 }
+                
                 ?>
-                <form action="wall.php" method="post">
-                    <button type="submit">S'abonner</button>
-                </form>
+                
                 <p>Sur cette page vous trouverez tous les messages de l'utilisateurice : <a href="wall.php?user_id=<?php echo $user['id'] ?>"> <?php echo $user['alias'] ?> </a>
-                    <!-- (n° <?php $userId ?>) -->
+                    <!-- (n° <?php $wallUserId ?>) -->
                 </p>
 
             </section>
@@ -100,7 +113,7 @@ $authorId = $_SESSION['connected_id'];
                     LEFT JOIN posts_tags ON posts.id = posts_tags.post_id  
                     LEFT JOIN tags       ON posts_tags.tag_id  = tags.id 
                     LEFT JOIN likes      ON likes.post_id  = posts.id 
-                    WHERE posts.user_id='$userId' 
+                    WHERE posts.user_id='$wallUserId' 
                     GROUP BY posts.id
                     ORDER BY posts.created DESC  
                     ";
@@ -132,7 +145,7 @@ $authorId = $_SESSION['connected_id'];
                 </article>
             <?php } ?>
             <?php
-            if ($userId == $authorId) {
+            if ($wallUserId == $currentId) {
             ?>
                 <article>
                     <h2>Poster un message</h2>
@@ -150,17 +163,17 @@ $authorId = $_SESSION['connected_id'];
 
                         $postContent = $_POST['message'];
 
-                        $authorId = intval($mysqli->real_escape_string($authorId));
+                        $currentId = intval($mysqli->real_escape_string($currentId));
                         $postContent = $mysqli->real_escape_string($postContent);
 
-                        $laQuestionEnSql = "INSERT INTO posts (user_id, content, created, parent_id) VALUES ($authorId, '$postContent', NOW(), NULL);";
+                        $laQuestionEnSql = "INSERT INTO posts (user_id, content, created, parent_id) VALUES ($currentId, '$postContent', NOW(), NULL);";
 
                         // Etape 5 : execution
                         $ok = $mysqli->query($laQuestionEnSql);
                         if (!$ok) {
                             echo "Impossible d'ajouter le message: " . $mysqli->error;
                         } else {
-                            echo "Message posté en tant que : " . $authorId;
+                            echo "Message posté en tant que : " . $currentId;
                         }
                     }
                     ?>
