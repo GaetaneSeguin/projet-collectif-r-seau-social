@@ -1,6 +1,7 @@
 <?php
 session_start();
 $currentId = $_SESSION['connected_id'];
+ob_start();
 ?>
 
 <!doctype html>
@@ -67,35 +68,34 @@ $currentId = $_SESSION['connected_id'];
                 <h3>Présentation</h3>
                 <?php
                 if ($currentId != $wallUserId) {
-                    $laQuestionEnSql = "SELECT * FROM followers WHERE following_user_id= '$wallUserId' AND followed_user_id = '$currentId' ";
+                    $laQuestionEnSql = "SELECT * FROM followers WHERE following_user_id= '$currentId' AND followed_user_id = '$wallUserId' ";
                     $lesInformations = $mysqli->query($laQuestionEnSql);
                     $follow = $lesInformations->fetch_assoc();
                     if (!$follow) {
-                        ?>
+                ?>
                         <form method="post">
                             <input type="hidden" name="formFollow" value="formFollowValue">
-                            <button action= "wall.php?user_id=<?php echo $wallUserId ?>" type="submit">S'abonner</button>
+                            <button action="wall.php?user_id=<?php echo $wallUserId ?>" type="submit">S'abonner</button>
                         </form>
-                    <?php
-                        if ($_SERVER["REQUEST_METHOD"]=="POST"){
-                            if ($_POST['formFollow']=="formFollowValue"){
+                <?php
+                        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                            if ($_POST['formFollow'] == "formFollowValue") {
                                 $setTableFollowersSql = "INSERT INTO followers (followed_user_id, following_user_id) 
-                                VALUES ($currentId, $wallUserId);";
+                                VALUES ($wallUserId, $currentId);";
                                 $setOk = $mysqli->query($setTableFollowersSql);
                                 if (!$setOk) {
-                                    echo "Impossible d'ajouter le message: " . $mysqli->error;
+                                    echo "Impossible de s'abonner" . $mysqli->error;
                                 } else {
                                     header("Refresh:0");
-                                } 
+                                }
                             }
                         }
-                    }else{
+                    } else {
                         echo "vous êtes abonné.e";
                     }
-                        
                 }
                 ?>
-                
+
                 <p>Sur cette page vous trouverez tous les messages de l'utilisateurice : <a href="wall.php?user_id=<?php echo $user['id'] ?>"> <?php echo $user['alias'] ?> </a>
                     <!-- (n° <?php $wallUserId ?>) -->
                 </p>
@@ -109,8 +109,8 @@ $currentId = $_SESSION['connected_id'];
              * Etape 3: récupérer tous les messages de l'utilisatrice
              */
             $laQuestionEnSql = "
-                    SELECT posts.content, posts.created, users.alias as author_name, 
-                    COUNT(likes.id) as like_number, GROUP_CONCAT(DISTINCT tags.label) AS taglist 
+                    SELECT posts.id, posts.content, posts.created, users.alias as author_name,
+                    GROUP_CONCAT(DISTINCT tags.label) AS taglist 
                     FROM posts
                     JOIN users ON  users.id=posts.user_id
                     LEFT JOIN posts_tags ON posts.id = posts_tags.post_id  
@@ -118,9 +118,12 @@ $currentId = $_SESSION['connected_id'];
                     LEFT JOIN likes      ON likes.post_id  = posts.id 
                     WHERE posts.user_id='$wallUserId' 
                     GROUP BY posts.id
-                    ORDER BY posts.created DESC  
+                    ORDER BY posts.created DESC
                     ";
+
+
             $lesInformations = $mysqli->query($laQuestionEnSql);
+
             if (!$lesInformations) {
                 echo ("Échec de la requete : " . $mysqli->error);
             }
@@ -139,15 +142,56 @@ $currentId = $_SESSION['connected_id'];
                         <p><?php echo $post['content'] ?></p>
                     </div>
                     <footer>
-                        <small>♥ <?php echo $post['like_number'] ?></small>
-                        <a href=""><?php $hastag = explode(",", $post['taglist']);
+                        <?php
+                        $postId = $post['id'];
+                        $laQuestionEnSql = "SELECT * FROM likes WHERE user_id= '$currentId' AND post_id= '$postId'";
+                        $lesInfo = $mysqli->query($laQuestionEnSql);
+                        $like = $lesInfo->fetch_assoc();
+
+                        $lAutreQuestionEnSql = "SELECT COUNT(*) FROM likes WHERE post_id='$postId'";
+                        $lesAutresInfos = $mysqli->query($lAutreQuestionEnSql);
+                        $autreLike = $lesAutresInfos->fetch_assoc();
+
+
+
+                        if (!$like) {
+                        ?>
+                            <form method="post">
+                                <input type="hidden" name="likePost" value="likePostValue">
+                                <button action="wall.php?user_id=<?php echo $wallUserId ?>" type="submit">♥</button>
+                                <small> <?php echo $autreLike ?></small>
+                            </form>
+
+
+                        <?php
+                            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                                if ($_POST['likePost'] == "likePostValue") {
+                                    $setTableLikesSql = "INSERT INTO likes (user_id, post_id) 
+                                    VALUES ($currentId, $postId);";
+                                    $setOk = $mysqli->query($setTableLikesSql);
+                                    if (!$setOk) {
+                                        echo "Impossible de liker" . $mysqli->error;
+                                    } else {
+                                        // header("Refresh:0");
+                                        echo "bravo";
+                                    }
+                                }
+                            }
+                        }
+                        ?>
+
+
+
+                        <a href=""><?php
+                                    $hastag = explode(",", $post['taglist']);
                                     foreach ($hastag as $tag)
                                         echo  '#' . $tag . " " ?></a>
 
                     </footer>
                 </article>
-            <?php } ?>
+
             <?php
+            }
             if ($wallUserId == $currentId) {
             ?>
                 <article>
@@ -177,11 +221,13 @@ $currentId = $_SESSION['connected_id'];
                             echo "Impossible d'ajouter le message: " . $mysqli->error;
                         } else {
                             header("Refresh:0");
-                            
                         }
                     }
+
+                    ob_end_flush()
+
                     ?>
-                    <form method="post">
+                    <form action="wall.php?user_id=<?php echo $wallUserId ?>" method="post">
                         <dl>
                             <dt><label for='message'>Message</label></dt>
                             <dd><textarea name='message'></textarea></dd>
@@ -190,8 +236,7 @@ $currentId = $_SESSION['connected_id'];
                     </form>
                 </article>
             <?php
-            } else {
-                echo "<a href='admin.php?user_id=5'>Administration</a>";
+
             }
             ?>
 
