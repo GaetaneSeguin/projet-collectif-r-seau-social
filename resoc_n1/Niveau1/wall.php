@@ -148,11 +148,14 @@ ob_start();
                         $lesInfo = $mysqli->query($laQuestionEnSql);
                         $like = $lesInfo->fetch_assoc();
 
-                        $lAutreQuestionEnSql = "SELECT COUNT(*) FROM likes WHERE post_id='$postId'";
+                        $lAutreQuestionEnSql = "SELECT COUNT(*) as count_likes FROM likes WHERE post_id='$postId'";
                         $lesAutresInfos = $mysqli->query($lAutreQuestionEnSql);
                         $autreLike = $lesAutresInfos->fetch_assoc();
 
-
+                        echo ($autreLike['count_likes']);
+                        //count de likes OK, par contre, pb de likes automatiques sur tous les posts dès qu'on like 1 truc
+                        //checker likePost
+                        //différenciation des boutons par article ?
 
                         if (!$like) {
                         ?>
