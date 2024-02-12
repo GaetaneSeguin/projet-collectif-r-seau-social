@@ -34,7 +34,7 @@ include './scripts/connexion.php';
             $user = $lesInformations->fetch_assoc();
 
             ?>
-            <img src="user.jpg" alt="Portrait de l'utilisatrice" />
+            <img src="user.jpg" alt="Portrait de l'utilisateurice" />
             <section>
                 <h3>Présentation</h3>
                 <?php
@@ -42,34 +42,23 @@ include './scripts/connexion.php';
                     $laQuestionEnSql = "SELECT * FROM followers WHERE following_user_id= '$currentId' AND followed_user_id = '$wallUserId' ";
                     $lesInformations = $mysqli->query($laQuestionEnSql);
                     $follow = $lesInformations->fetch_assoc();
-                    if (!$follow) {
-                ?>
-                        <form method="post">
-                            <input type="hidden" name="formFollow" value="formFollowValue">
-                            <button action="wall.php?user_id=<?php echo $wallUserId ?>" type="submit">S'abonner</button>
+                    if (!$follow){
+                    ?>
+                        <form method="post" action="./scripts/abonnements.php?wall_id=<?php echo $wallUserId ?> ">
+                        <button type="submit">S'abonner</button>
                         </form>
-                <?php
-                        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                            if ($_POST['formFollow'] == "formFollowValue") {
-                                $setTableFollowersSql = "INSERT INTO followers (followed_user_id, following_user_id) 
-                                VALUES ($wallUserId, $currentId);";
-                                $setOk = $mysqli->query($setTableFollowersSql);
-                                if (!$setOk) {
-                                    echo "Impossible de s'abonner" . $mysqli->error;
-                                } else {
-                                    header("Refresh:0");
-                                }
-                            }
-                        }
-                    } else {
-                        echo "vous êtes abonné.e";
-                    }
+                    <?php
+                    }else {
+                    ?>
+                        <form method="post" action="./scripts/abonnements.php?wall_id=<?php echo $wallUserId ?> ">
+                        <button type="submit">Se désabonner</button>
+                        </form>
+                    <?php
                 }
-                ?>
-
-                <p>Sur cette page vous trouverez tous les messages de l'utilisateurice : <a href="wall.php?user_id=<?php echo $user['id'] ?>"> <?php echo $user['alias'] ?> </a>
-                    <!-- (n° <?php $wallUserId ?>) -->
-                </p>
+            }
+            ?>
+            <p>Sur cette page vous trouverez tous les messages de l'utilisateurice : <a href="wall.php?user_id=<?php echo $user['id'] ?>"> <?php echo $user['alias'] ?> </a>
+            </p>
 
             </section>
         </aside>

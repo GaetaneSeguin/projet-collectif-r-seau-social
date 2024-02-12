@@ -22,13 +22,8 @@ include './scripts/connexion.php';
 
         $userId = intval($_GET['user_id']);
         ?>
-
-
-
         <aside>
             <?php
-
-
             $laQuestionEnSql = "
                 SELECT users.*, 
                 count(DISTINCT posts.id) as totalpost, 
@@ -55,8 +50,6 @@ include './scripts/connexion.php';
                 <p>Sur cette page vous trouverez les informations de l'utilisateurice : <?php echo $user['alias'] ?>
                     <!-- n° <?php intval($_GET['user_id']) ?> -->
                 </p>
-
-
             </section>
         </aside>
         <main>

@@ -58,8 +58,13 @@ include './scripts/connexion.php';
                     <h3>
                         <a href="wall.php?user_id=<?php echo $post['id'] ?>"> <?php echo $post['alias'] ?> </a></time>
                     </h3>
-
+                <footer>
+                    <form method="post" action="./scripts/abonnements.php?wall_id=<?php echo $post['id'] ?> ">
+                    <button type="submit">Se désabonner</button>
+                    </form>
+                </footer>
                 </article>
+
 
             <?php
 

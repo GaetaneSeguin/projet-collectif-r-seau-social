@@ -1,6 +1,5 @@
 <?php
 session_start();
-$currentId = $_SESSION['connected_id'];
 include './scripts/connexion.php';
 ?>
 <!doctype html>
