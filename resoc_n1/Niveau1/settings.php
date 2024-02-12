@@ -19,29 +19,16 @@ include './scripts/connexion.php';
 
     <div id="wrapper" class='profile'>
         <?php
-        /**
-         * Etape 1: Les paramètres concernent une utilisatrice en particulier
-         * La première étape est donc de trouver quel est l'id de l'utilisatrice
-         * Celui ci est indiqué en parametre GET de la page sous la forme user_id=...
-         * Documentation : https://www.php.net/manual/fr/reserved.variables.get.php
-         * ... mais en résumé c'est une manière de passer des informations à la page en ajoutant des choses dans l'url
-         */
+
         $userId = intval($_GET['user_id']);
         ?>
 
-        <?php
-        /**
-         * Etape 2: se connecter à la base de donnée
-         */
-        include 'connexion.php';
-        ?>
+
 
         <aside>
             <?php
 
-            /**
-             * Etape 3: récupérer le nom de l'utilisateur
-             */
+
             $laQuestionEnSql = "
                 SELECT users.*, 
                 count(DISTINCT posts.id) as totalpost, 
@@ -60,11 +47,7 @@ include './scripts/connexion.php';
             }
             $user = $lesInformations->fetch_assoc();
 
-            /**
-             * Etape 4: à vous de jouer
-             */
-            //@todo: afficher le résultat de la ligne ci dessous, remplacer les valeurs ci-après puiseffacer la ligne ci-dessous
-            // echo "<pre>" . print_r($user, 1) . "</pre>";
+
             ?>
             <img src="user.jpg" alt="Portrait de l'utilisatrice" />
             <section>
@@ -85,7 +68,7 @@ include './scripts/connexion.php';
                     <dd><a href="wall.php?user_id=<?php echo $user['id'] ?>"> <?php echo $user['alias'] ?> </a></dd>
                     <dt>Email</dt>
                     <dd><?php echo $user['email'] ?></dd>
-                    <dt>Nombre de message</dt>
+                    <dt>Nombre de messages</dt>
                     <dd><?php echo $user['totalpost'] ?></dd>
                     <dt>Nombre de "J'aime" donnés </dt>
                     <dd><?php echo $user['totalgiven'] ?></dd>

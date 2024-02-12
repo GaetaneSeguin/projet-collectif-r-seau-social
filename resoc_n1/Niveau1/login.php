@@ -14,13 +14,13 @@ include './scripts/connexion.php';
 </head>
 
 <body>
-    <?php include './templates/header.php' ?>
+
 
     <div id="wrapper">
 
         <aside>
             <h2>Présentation</h2>
-            <p>Bienvenu sur notre réseau social.</p>
+            <p>Bienvenue sur notre réseau social.</p>
         </aside>
         <main>
             <article>

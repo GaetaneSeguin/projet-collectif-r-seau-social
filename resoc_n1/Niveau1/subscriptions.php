@@ -58,7 +58,7 @@ include './scripts/connexion.php';
                     <h3>
                         <a href="wall.php?user_id=<?php echo $post['id'] ?>"> <?php echo $post['alias'] ?> </a></time>
                     </h3>
-                    <!-- <p><?php $post['id'] ?></p> -->
+
                 </article>
 
             <?php

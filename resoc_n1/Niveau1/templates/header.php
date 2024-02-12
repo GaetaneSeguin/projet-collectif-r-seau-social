@@ -8,11 +8,12 @@
         <a href="tags.php?tag_id=1">Mots-clés</a>
     </nav>
     <nav id="user">
-        <a href="#">Profil</a>
+        <a href="login.php">Profil</a>
         <ul>
             <li><a href="settings.php?user_id=<?php echo $currentId ?>">Paramètres</a></li>
             <li><a href="followers.php?user_id=<?php echo $currentId ?>">Mes suiveurs</a></li>
             <li><a href="subscriptions.php?user_id=<?php echo $currentId ?>">Mes abonnements</a></li>
+            <li><a href="./scripts/deconnexion.php?user_id=<?php echo $currentId ?>">Deconnexion</a></li>
         </ul>
 
     </nav>
