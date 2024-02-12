@@ -2,6 +2,7 @@
 session_start();
 $currentId = $_SESSION['connected_id'];
 ob_start();
+include './scripts/connexion.php';
 ?>
 
 <!doctype html>
@@ -15,24 +16,7 @@ ob_start();
 </head>
 
 <body>
-    <header>
-        <img src="resoc.jpg" alt="Logo de notre réseau social" />
-        <nav id="menu">
-            <a href="news.php">Actualités</a>
-            <a href="wall.php?user_id=<?php echo $currentId ?>">Mur</a>
-            <a href="feed.php?user_id=<?php echo $currentId ?>">Flux</a>
-            <a href="tags.php?tag_id=1">Mots-clés</a>
-        </nav>
-        <nav id="user">
-            <a href="#">Profil</a>
-            <ul>
-                <li><a href="settings.php?user_id=5">Paramètres</a></li>
-                <li><a href="followers.php?user_id=5">Mes suiveurs</a></li>
-                <li><a href="subscriptions.php?user_id=5">Mes abonnements</a></li>
-            </ul>
-
-        </nav>
-    </header>
+    <?php include './templates/header.php' ?>
 
     <div id="wrapper">
         <?php
@@ -50,7 +34,7 @@ ob_start();
         /**
          * Etape 2: se connecter à la base de donnée
          */
-        include 'connexion.php';
+
         ?>
 
         <aside>
@@ -142,45 +126,8 @@ ob_start();
                         <p><?php echo $post['content'] ?></p>
                     </div>
                     <footer>
-                        <?php
-                        $postId = $post['id'];
-                        $laQuestionEnSql = "SELECT * FROM likes WHERE user_id= '$currentId' AND post_id= '$postId'";
-                        $lesInfo = $mysqli->query($laQuestionEnSql);
-                        $like = $lesInfo->fetch_assoc();
 
-                        $lAutreQuestionEnSql = "SELECT COUNT(*) FROM likes WHERE post_id='$postId'";
-                        $lesAutresInfos = $mysqli->query($lAutreQuestionEnSql);
-                        $autreLike = $lesAutresInfos->fetch_assoc();
-
-
-
-                        if (!$like) {
-                        ?>
-                            <form method="post">
-                                <input type="hidden" name="likePost" value="likePostValue">
-                                <button action="wall.php?user_id=<?php echo $wallUserId ?>" type="submit">♥</button>
-                                <small> <?php echo $autreLike ?></small>
-                            </form>
-
-
-                        <?php
-                            if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                                if ($_POST['likePost'] == "likePostValue") {
-                                    $setTableLikesSql = "INSERT INTO likes (user_id, post_id) 
-                                    VALUES ($currentId, $postId);";
-                                    $setOk = $mysqli->query($setTableLikesSql);
-                                    if (!$setOk) {
-                                        echo "Impossible de liker" . $mysqli->error;
-                                    } else {
-                                        // header("Refresh:0");
-                                        echo "bravo";
-                                    }
-                                }
-                            }
-                        }
-                        ?>
-
-
+                        <?php include './scripts/buttonLikes.php' ?>
 
                         <a href=""><?php
                                     $hastag = explode(",", $post['taglist']);
@@ -198,10 +145,8 @@ ob_start();
                     <h2>Poster un message</h2>
                     <?php
 
-                    ini_set('display_errors', 1);
-                    ini_set('display_startup_errors', 1);
-                    error_reporting(E_ALL);
-                    include 'connexion.php';
+
+
 
 
                     $enCoursDeTraitement = isset($_POST['message']);

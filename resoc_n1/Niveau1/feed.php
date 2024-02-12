@@ -5,7 +5,8 @@ if (!isset($_SESSION['connected_id'])) {
     header('Location: login.php');
     exit();
 }
-$authorId = $_SESSION['connected_id'];
+$currentId = $_SESSION['connected_id'];
+include './scripts/connexion.php';
 ?>
 
 <!doctype html>
@@ -19,24 +20,7 @@ $authorId = $_SESSION['connected_id'];
 </head>
 
 <body>
-    <header>
-        <img src="resoc.jpg" alt="Logo de notre réseau social" />
-        <nav id="menu">
-            <a href="news.php">Actualités</a>
-            <a href="wall.php?user_id=<?php echo $authorId ?>">Mur</a>
-            <a href="feed.php?user_id=<?php echo $authorId ?>">Flux</a>
-            <a href="tags.php?tag_id=1">Mots-clés</a>
-        </nav>
-        <nav id="user">
-            <a href="#">Profil</a>
-            <ul>
-                <li><a href="settings.php?user_id=5">Paramètres</a></li>
-                <li><a href="followers.php?user_id=5">Mes suiveurs</a></li>
-                <li><a href="subscriptions.php?user_id=5">Mes abonnements</a></li>
-            </ul>
-
-        </nav>
-    </header>
+    <?php include './templates/header.php' ?>
     <div id="wrapper">
         <?php
         /**
@@ -53,7 +37,7 @@ $authorId = $_SESSION['connected_id'];
         /**
          * Etape 2: se connecter à la base de donnée
          */
-        include 'connexion.php';
+
         ?>
 
         <aside>
@@ -83,7 +67,7 @@ $authorId = $_SESSION['connected_id'];
              * Etape 3: récupérer tous les messages des abonnements
              */
             $laQuestionEnSql = "
-                    SELECT posts.content,
+                    SELECT posts.id, posts.content,
                     posts.created,
                     users.alias as author_name,  
                     users.id as user_id,
@@ -122,7 +106,7 @@ $authorId = $_SESSION['connected_id'];
 
                     </div>
                     <footer>
-                        <small>♥ <?php echo $post['like_number'] ?> </small>
+                        <?php include './scripts/buttonLikes.php' ?>
                         <a href=""><?php $hastag = explode(",", $post['taglist']);
                                     foreach ($hastag as $tag)
                                         echo  '#' . $tag . " " ?></a>
