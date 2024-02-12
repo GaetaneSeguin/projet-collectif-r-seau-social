@@ -67,7 +67,7 @@ include './scripts/connexion.php';
 
 
             $laQuestionEnSql = "
-                    SELECT posts.id, posts.content, posts.created, users.alias as author_name,
+                    SELECT posts.id, posts.content, posts.created, users.alias as author_name,tags.id as tagId, 
                     GROUP_CONCAT(DISTINCT tags.label) AS taglist 
                     FROM posts
                     JOIN users ON  users.id=posts.user_id
@@ -101,11 +101,14 @@ include './scripts/connexion.php';
 
                         <?php include './scripts/buttonLikes.php' ?>
 
-                        <a href=""><?php
-                                    $hastag = explode(",", $post['taglist']);
-                                    foreach ($hastag as $tag)
-                                        echo  '#' . $tag . " " ?></a>
+                        <?php
+                        $hastag = explode(",", $post['taglist']);
+                        foreach ($hastag as $tag) {
 
+                        ?>
+                            <a href="tags.php?tag_id=<?php echo $post['tagId'] ?>"> <?php echo  '#' . $tag . " "  ?></a>
+                        <?php
+                        } ?>
                     </footer>
                 </article>
 
@@ -137,6 +140,33 @@ include './scripts/connexion.php';
                         if (!$ok) {
                             echo "Impossible d'ajouter le message: " . $mysqli->error;
                         } else {
+
+                            $postId = $mysqli->insert_id;
+
+                            preg_match_all('/#\w+/', $postContent, $matches);
+                            $tags = array_unique($matches[0]);
+
+                            foreach ($tags as $tag) {
+                                $tagName = substr($tag, 1);
+                                $tagName = strtolower($tagName);
+
+                                $selectTag = "SELECT * from tags where label = '$tagName'";
+                                $selectTagResult = $mysqli->query($selectTag);
+
+                                if ($selectTagResult->num_rows == 0) {
+                                    $insertTag = ("INSERT into tags (label) values ('$tagName')");
+                                    $insertTagResult = $mysqli->query($insertTag);
+                                    if (!$insertTagResult) {
+                                        echo "Impossible d'ajouter le tag: " . $mysqli->error;
+                                    }
+                                    $tagId = $mysqli->insert_id;
+                                } else {
+                                    $tagId = $selectTagResult->fetch_assoc()['id'];
+                                }
+                                $insertPostTag = "INSERT into posts_tags (post_id, tag_id) values ($postId, $tagId)";
+                                $insertPostTagResult = $mysqli->query($insertPostTag);
+                            };
+
                             header("Refresh:0");
                         }
                     }

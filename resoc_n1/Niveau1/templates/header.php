@@ -8,7 +8,7 @@
         <a href="tags.php?tag_id=1">Mots-clés</a>
     </nav>
     <nav id="user">
-        <a href="login.php">Profil</a>
+        <a>Profil</a>
         <ul>
             <li><a href="settings.php?user_id=<?php echo $currentId ?>">Paramètres</a></li>
             <li><a href="followers.php?user_id=<?php echo $currentId ?>">Mes suiveurs</a></li>
