@@ -67,8 +67,8 @@ include './scripts/connexion.php';
 
 
             $laQuestionEnSql = "
-                    SELECT posts.id, posts.content, posts.created, users.alias as author_name,tags.id as tagId, 
-                    GROUP_CONCAT(DISTINCT tags.label) AS taglist 
+                    SELECT posts.id, posts.content, posts.created, users.alias as author_name,
+                    GROUP_CONCAT(tags.id, ':' ,tags.label) AS taglist 
                     FROM posts
                     JOIN users ON  users.id=posts.user_id
                     LEFT JOIN posts_tags ON posts.id = posts_tags.post_id  
@@ -103,12 +103,15 @@ include './scripts/connexion.php';
 
                         <?php
                         $hastag = explode(",", $post['taglist']);
-                        foreach ($hastag as $tag) {
-
+                        if (!empty($hastag[0])){
+                            foreach ($hastag as $tag) {
+                            list($tagId,$label)=explode(':',$tag)   
                         ?>
-                            <a href="tags.php?tag_id=<?php echo $post['tagId'] ?>"> <?php echo  '#' . $tag . " "  ?></a>
+                            <a href="tags.php?tag_id=<?php echo $tagId ?>"> <?php echo  '#' . $label . " "  ?></a>
                         <?php
-                        } ?>
+                            } 
+                        }
+                        ?>
                     </footer>
                 </article>
 

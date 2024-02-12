@@ -46,11 +46,10 @@ include './templates/header.php'
 
             $laQuestionEnSql = "
                     SELECT posts.content,
-                    posts.created,
+                    posts.created,posts.id,
                     users.alias as author_name,  
                     count(likes.id) as like_number,  
-                    tags.id,
-                    GROUP_CONCAT(DISTINCT tags.label) AS taglist 
+                    GROUP_CONCAT(tags.id, ':', tags.label) AS taglist 
                     FROM posts_tags as filter 
                     JOIN posts ON posts.id=filter.post_id
                     JOIN users ON users.id=posts.user_id
@@ -80,13 +79,21 @@ include './templates/header.php'
                         <p><?php echo $post['content'] ?></p>
                     </div>
                     <footer>
-                        <?php include './scripts/buttonLikes.php' ?>
-                        <a href=""><?php $hastag = explode(",", $post['taglist']);
-                                    foreach ($hastag as $tag)
-                                        echo  '#' . $tag . " " ?></a>
+                        
+                        <?php include './scripts/buttonLikes.php' ;?>
+                        <?php 
+                        $hastag = explode(",", $post['taglist']);
+                       foreach ($hastag as $tag) {
+                           list($tagId,$label)=explode(':',$tag)
+                           ?>
+                       
+                           <a href="tags.php?tag_id=<?php echo $tagId ?>"> <?php echo  '#' . $label . " "  ?></a>
+                       <?php
+                       } ?>
                     </footer>
                 </article>
-            <?php } ?>
+            <?php 
+            } ?>
 
 
         </main>
