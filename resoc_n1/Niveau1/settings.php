@@ -43,14 +43,20 @@ include './scripts/connexion.php';
             $user = $lesInformations->fetch_assoc();
             ?>
 
-            <img src="user.jpg" alt="Portrait de l'utilisateurice" />
+            <?php
+            $query = "SELECT photo FROM photos WHERE user = '$currentId'";
+            $lesInfos = $mysqli->query($query);
+            $nomPhoto = $lesInfos->fetch_assoc();
+            ?>
 
+            <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="Portrait de l'utilisateurice" />
+
+            <p>Changer/Ajouter une photo :</p>
             <form action="./scripts/photo.php" method="POST" enctype="multipart/form-data">
                 <label for="file"></label>
                 <input type="file" name="file">
                 <button type="submit">Enregistrer</button>
             </form>
-
 
             <section>
                 <h3>Présentation</h3>

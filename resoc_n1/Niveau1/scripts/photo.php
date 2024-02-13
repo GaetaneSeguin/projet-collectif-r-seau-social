@@ -16,22 +16,48 @@ if (isset($_FILES['file'])) {
     // $maxSize = 400000;
 
     if (in_array($extension, $extensions)) {
-        var_dump($tmpName);
 
-        $uniqueName = uniqid('', true);
-        //uniqid génère quelque chose comme ca : 5f586bf96dcd38.73540086
-        $file = $uniqueName . "." . $extension;
-        //$file = 5f586bf96dcd38.73540086.jpg
-        var_dump($file);
+        // Vérifiez si l'utilisateur a déjà une photo
+        $query = "SELECT photo FROM photos WHERE user = ?";
+        $stmt = $mysqli->prepare($query);
+        $stmt->bind_param("i", $currentId);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-        move_uploaded_file($tmpName, '../photos/' . $file);
+        if ($result->num_rows === 0) {
+            // L'utilisateur n'a pas encore de photo
+            $uniqueName = uniqid('', true);
+            //uniqid génère quelque chose comme ca : 5f586bf96dcd38.73540086
+            $file = $uniqueName . "." . $extension;
+            //$file = 5f586bf96dcd38.73540086.jpg
 
-        $insertPhoto = "INSERT INTO photos (user, photo) VALUES (?, ?)";
-        $insertStmt = $mysqli->prepare($insertPhoto);
-        $insertStmt->bind_param("is", $currentId, $file);
-        $insertStmt->execute();
+            move_uploaded_file($tmpName, '../photos/' . $file);
 
-        echo "Image enregistrée";
+            $insertPhoto = "INSERT INTO photos (user, photo) VALUES (?, ?)";
+            $insertStmt = $mysqli->prepare($insertPhoto);
+            $insertStmt->bind_param("is", $currentId, $file);
+            $insertStmt->execute();
+
+            header("location:" . $_SERVER['HTTP_REFERER']);
+        } else if ($result->num_rows === 1) {
+            // L'utilisateur a déjà une photo
+            $deleteQuery = "DELETE FROM photos WHERE user = ?";
+            $deleteStmt = $mysqli->prepare($deleteQuery);
+            $deleteStmt->bind_param("i", $currentId);
+            $deleteStmt->execute();
+
+            $uniqueName = uniqid('', true);
+            $file = $uniqueName . "." . $extension;
+
+            move_uploaded_file($tmpName, '../photos/' . $file);
+
+            $insertPhoto = "INSERT INTO photos (user, photo) VALUES (?, ?)";
+            $insertStmt = $mysqli->prepare($insertPhoto);
+            $insertStmt->bind_param("is", $currentId, $file);
+            $insertStmt->execute();
+
+            header("location:" . $_SERVER['HTTP_REFERER']);
+        }
     } else {
         echo "Une erreur est survenue";
     }

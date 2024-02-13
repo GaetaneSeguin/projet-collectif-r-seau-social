@@ -31,7 +31,15 @@ include './templates/header.php'
             $tag = $lesInformations->fetch_assoc();
 
             ?>
-            <img src="user.jpg" alt="Portrait de l'utilisatrice" />
+
+            <?php
+            $query = "SELECT photo FROM photos WHERE user = '$currentId'";
+            $lesInfos = $mysqli->query($query);
+            $nomPhoto = $lesInfos->fetch_assoc();
+            ?>
+
+            <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="Portrait de l'utilisateurice" />
+
             <section>
                 <h3>Présentation</h3>
                 <p>Sur cette page vous trouverez les derniers messages comportant
@@ -79,20 +87,20 @@ include './templates/header.php'
                         <p><?php echo $post['content'] ?></p>
                     </div>
                     <footer>
-                        
-                        <?php include './scripts/buttonLikes.php' ;?>
-                        <?php 
+
+                        <?php include './scripts/buttonLikes.php'; ?>
+                        <?php
                         $hastag = explode(",", $post['taglist']);
-                       foreach ($hastag as $tag) {
-                           list($tagId,$label)=explode(':',$tag)
-                           ?>
-                       
-                           <a href="tags.php?tag_id=<?php echo $tagId ?>"> <?php echo  '#' . $label . " "  ?></a>
-                       <?php
-                       } ?>
+                        foreach ($hastag as $tag) {
+                            list($tagId, $label) = explode(':', $tag)
+                        ?>
+
+                            <a href="tags.php?tag_id=<?php echo $tagId ?>"> <?php echo  '#' . $label . " "  ?></a>
+                        <?php
+                        } ?>
                     </footer>
                 </article>
-            <?php 
+            <?php
             } ?>
 
 

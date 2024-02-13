@@ -36,7 +36,15 @@ include './scripts/connexion.php';
             $user = $lesInformations->fetch_assoc();
 
             ?>
-            <img src="user.jpg" alt="Portrait de l'utilisatrice" />
+
+            <?php
+            $query = "SELECT photo FROM photos WHERE user = '$currentId'";
+            $lesInfos = $mysqli->query($query);
+            $nomPhoto = $lesInfos->fetch_assoc();
+            ?>
+
+            <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="Portrait de l'utilisateurice" />
+
             <section>
                 <h3>Présentation</h3>
                 <p>Sur cette page vous trouverez tous les message des utilisateurices

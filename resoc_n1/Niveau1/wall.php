@@ -34,7 +34,15 @@ include './scripts/connexion.php';
             $user = $lesInformations->fetch_assoc();
 
             ?>
-            <img src="user.jpg" alt="Portrait de l'utilisateurice" />
+
+            <?php
+            $query = "SELECT photo FROM photos WHERE user = '$currentId'";
+            $lesInfos = $mysqli->query($query);
+            $nomPhoto = $lesInfos->fetch_assoc();
+            ?>
+
+            <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="Portrait de l'utilisateurice" />
+
             <section>
                 <h3>Présentation</h3>
                 <?php
@@ -42,23 +50,23 @@ include './scripts/connexion.php';
                     $laQuestionEnSql = "SELECT * FROM followers WHERE following_user_id= '$currentId' AND followed_user_id = '$wallUserId' ";
                     $lesInformations = $mysqli->query($laQuestionEnSql);
                     $follow = $lesInformations->fetch_assoc();
-                    if (!$follow){
-                    ?>
+                    if (!$follow) {
+                ?>
                         <form method="post" action="./scripts/abonnements.php?wall_id=<?php echo $wallUserId ?> ">
-                        <button type="submit">S'abonner</button>
+                            <button type="submit">S'abonner</button>
                         </form>
                     <?php
-                    }else {
+                    } else {
                     ?>
                         <form method="post" action="./scripts/abonnements.php?wall_id=<?php echo $wallUserId ?> ">
-                        <button type="submit">Se désabonner</button>
+                            <button type="submit">Se désabonner</button>
                         </form>
-                    <?php
+                <?php
+                    }
                 }
-            }
-            ?>
-            <p>Sur cette page vous trouverez tous les messages de l'utilisateurice : <a href="wall.php?user_id=<?php echo $user['id'] ?>"> <?php echo $user['alias'] ?> </a>
-            </p>
+                ?>
+                <p>Sur cette page vous trouverez tous les messages de l'utilisateurice : <a href="wall.php?user_id=<?php echo $user['id'] ?>"> <?php echo $user['alias'] ?> </a>
+                </p>
 
             </section>
         </aside>
@@ -103,13 +111,13 @@ include './scripts/connexion.php';
 
                         <?php
                         $hastag = explode(",", $post['taglist']);
-                        if (!empty($hastag[0])){
+                        if (!empty($hastag[0])) {
                             foreach ($hastag as $tag) {
-                            list($tagId,$label)=explode(':',$tag)   
+                                list($tagId, $label) = explode(':', $tag)
                         ?>
-                            <a href="tags.php?tag_id=<?php echo $tagId ?>"> <?php echo  '#' . $label . " "  ?></a>
+                                <a href="tags.php?tag_id=<?php echo $tagId ?>"> <?php echo  '#' . $label . " "  ?></a>
                         <?php
-                            } 
+                            }
                         }
                         ?>
                     </footer>

@@ -136,6 +136,18 @@ CREATE TABLE IF NOT EXISTS `socialnetwork`.`likes` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `socialnetwork`.`photos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `socialnetwork`.`photos` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user` INT UNSIGNED NOT NULL,
+  `photo` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `photo_UNIQUE` (`photo` ASC))
+ENGINE = InnoDB;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

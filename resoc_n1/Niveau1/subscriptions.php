@@ -26,7 +26,15 @@ include './scripts/connexion.php';
             $lesInformations = $mysqli->query($laQuestionEnSql);
             $user = $lesInformations->fetch_assoc();
             ?>
-            <img src="user.jpg" alt="Portrait de l'utilisatrice" />
+
+            <?php
+            $query = "SELECT photo FROM photos WHERE user = '$currentId'";
+            $lesInfos = $mysqli->query($query);
+            $nomPhoto = $lesInfos->fetch_assoc();
+            ?>
+
+            <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="Portrait de l'utilisateurice" />
+
             <section>
                 <h3>Présentation</h3>
                 <p>Sur cette page vous trouverez la liste des personnes dont
@@ -54,15 +62,22 @@ include './scripts/connexion.php';
             ?>
 
                 <article>
-                    <img src="user.jpg" alt="blason" />
+                    <?php
+                    $postId = $post['id'];
+                    $selectPhoto = "SELECT photo FROM photos WHERE user='$postId'";
+                    $RecupInfos = $mysqli->query($selectPhoto);
+                    $nomPhoto = $RecupInfos->fetch_assoc();
+                    ?>
+
+                    <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="Portrait de l'utilisateurice" />
                     <h3>
                         <a href="wall.php?user_id=<?php echo $post['id'] ?>"> <?php echo $post['alias'] ?> </a></time>
                     </h3>
-                <footer>
-                    <form method="post" action="./scripts/abonnements.php?wall_id=<?php echo $post['id'] ?> ">
-                    <button type="submit">Se désabonner</button>
-                    </form>
-                </footer>
+                    <footer>
+                        <form method="post" action="./scripts/abonnements.php?wall_id=<?php echo $post['id'] ?> ">
+                            <button type="submit">Se désabonner</button>
+                        </form>
+                    </footer>
                 </article>
 
 
