@@ -41,10 +41,17 @@ include './scripts/connexion.php';
                 echo ("Échec de la requete : " . $mysqli->error);
             }
             $user = $lesInformations->fetch_assoc();
-
-
             ?>
-            <img src="user.jpg" alt="Portrait de l'utilisatrice" />
+
+            <img src="user.jpg" alt="Portrait de l'utilisateurice" />
+
+            <form action="./scripts/photo.php" method="POST" enctype="multipart/form-data">
+                <label for="file"></label>
+                <input type="file" name="file">
+                <button type="submit">Enregistrer</button>
+            </form>
+
+
             <section>
                 <h3>Présentation</h3>
                 <p>Sur cette page vous trouverez les informations de l'utilisateurice : <?php echo $user['alias'] ?>

@@ -17,12 +17,11 @@ include './scripts/connexion.php';
 
 <body>
 
-    <?php include './templates/header.php' ?>
     <div id="wrapper">
 
         <aside>
             <h2>Présentation</h2>
-            <p>Bienvenu sur notre réseau social.</p>
+            <p>Bienvenue sur notre réseau social.</p>
         </aside>
         <main>
             <article>
@@ -35,10 +34,6 @@ include './scripts/connexion.php';
                     $new_email = $_POST['email'];
                     $new_alias = $_POST['pseudo'];
                     $new_passwd = $_POST['motpasse'];
-
-
-
-                    include 'connexion.php';
 
                     $new_email = $mysqli->real_escape_string($new_email);
                     $new_alias = $mysqli->real_escape_string($new_alias);
