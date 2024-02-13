@@ -39,9 +39,17 @@ include './scripts/connexion.php';
             $query = "SELECT photo FROM photos WHERE user = '$currentId'";
             $lesInfos = $mysqli->query($query);
             $nomPhoto = $lesInfos->fetch_assoc();
-            ?>
-
-            <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="Portrait de l'utilisateurice" />
+            if (!isset ($nomPhoto)){
+                ?>
+                    <img src="./photos/user.jpg" alt="" />
+                    
+                <?php
+                } else {
+                ?>
+                    <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="Portrait de l'utilisateurice" />
+                <?php
+                }
+                ?>
 
             <section>
                 <h3>Présentation</h3>
@@ -119,7 +127,12 @@ include './scripts/connexion.php';
                         <?php
                             }
                         }
+                        
                         ?>
+                        <form action="./scripts/suppressionArticle.php">
+                        <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
+                            <button type ="submit">Suppression</button>
+                        </form>
                     </footer>
                 </article>
 
@@ -130,11 +143,6 @@ include './scripts/connexion.php';
                 <article>
                     <h2>Poster un message</h2>
                     <?php
-
-
-
-
-
                     $enCoursDeTraitement = isset($_POST['message']);
                     if ($enCoursDeTraitement) {
 

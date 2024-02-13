@@ -41,10 +41,17 @@ include './scripts/connexion.php';
             $query = "SELECT photo FROM photos WHERE user = '$currentId'";
             $lesInfos = $mysqli->query($query);
             $nomPhoto = $lesInfos->fetch_assoc();
+            if (!isset ($nomPhoto)){
             ?>
-
-            <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="Portrait de l'utilisateurice" />
-
+                <img src="./photos/user.jpg" alt="" />
+                
+            <?php
+            } else {
+            ?>
+                <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="./photos/user.jpg" />
+            <?php
+            }
+            ?>
             <section>
                 <h3>Présentation</h3>
                 <p>Sur cette page vous trouverez tous les message des utilisateurices

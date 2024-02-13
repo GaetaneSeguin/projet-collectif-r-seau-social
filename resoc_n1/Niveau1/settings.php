@@ -47,10 +47,17 @@ include './scripts/connexion.php';
             $query = "SELECT photo FROM photos WHERE user = '$currentId'";
             $lesInfos = $mysqli->query($query);
             $nomPhoto = $lesInfos->fetch_assoc();
-            ?>
-
-            <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="Portrait de l'utilisateurice" />
-
+            if (!isset ($nomPhoto)){
+                ?>
+                    <img src="./photos/user.jpg" alt="" />
+                    
+                <?php
+                } else {
+                ?>
+                    <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="Portrait de l'utilisateurice" />
+                <?php
+                }
+                ?>
             <p>Changer/Ajouter une photo :</p>
             <form action="./scripts/photo.php" method="POST" enctype="multipart/form-data">
                 <label for="file"></label>
