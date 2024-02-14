@@ -89,7 +89,6 @@ include './scripts/connexion.php';
                     JOIN users ON  users.id=posts.user_id
                     LEFT JOIN posts_tags ON posts.id = posts_tags.post_id  
                     LEFT JOIN tags       ON posts_tags.tag_id  = tags.id 
-                    LEFT JOIN likes      ON likes.post_id  = posts.id 
                     WHERE posts.user_id='$wallUserId' 
                     GROUP BY posts.id
                     ORDER BY posts.created DESC
@@ -182,8 +181,13 @@ include './scripts/connexion.php';
                                 } else {
                                     $tagId = $selectTagResult->fetch_assoc()['id'];
                                 }
-                                $insertPostTag = "INSERT into posts_tags (post_id, tag_id) values ($postId, $tagId)";
-                                $insertPostTagResult = $mysqli->query($insertPostTag);
+                                $selectPostTag = "SELECT * from posts_tags where post_id = $postId and tag_id = $tagId";
+                                $selectPostTagResult = $mysqli->query($selectPostTag);
+
+                                if ($selectPostTagResult->num_rows == 0) {
+                                    $insertPostTag = "INSERT into posts_tags (post_id, tag_id) values ($postId, $tagId)";
+                                    $insertPostTagResult = $mysqli->query($insertPostTag);
+                                }
                             };
 
                             header("Refresh:0");
