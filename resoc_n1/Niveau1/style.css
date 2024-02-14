@@ -99,7 +99,9 @@ body>header #user:hover ul{
     margin-top: 2em;
     margin-bottom: 2em ;
     border-radius: 2em;
-    box-shadow: 10px -5px 5px 2px rgba(0, 0, 0, 0.5);}
+    box-shadow: 10px -5px 5px 2px rgba(0, 0, 0, 0.5);
+    width: 95%;}
+
 /* modif */
 .has-dropcap:first-letter {    
     float: left;
@@ -191,8 +193,8 @@ form dl dd textarea{width:40em;height: 15em;}
   z-index: 1;
 }
 .logo {
-    width: 50px;
-    height: 50px;
+    width: 100px;
+    height: 100px;
 }
 /* ----------------------------------------------------------------------- */
 

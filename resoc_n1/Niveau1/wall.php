@@ -126,12 +126,13 @@ include './scripts/connexion.php';
                         <?php
                             }
                         }
-
-                        ?>
+ 
+                        if ($wallUserId == $currentId) { ?>
                         <form action="./scripts/suppressionArticle.php">
                             <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
                             <button type="submit" class="btn-style">Suppression</button>
                         </form>
+                        <?php } ?>
                     </footer>
                 </article>
 
