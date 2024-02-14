@@ -1,5 +1,5 @@
 <header>
-    <a href='admin.php'><img src="resoc.jpg" alt="Logo de notre réseau social" /></a>
+    <a href='admin.php'><img class="logo" src="./oeuf_dore.jpg" alt="Logo de notre réseau social" /></a>
 
     <nav id="menu">
         <a href="news.php">Actualités</a>

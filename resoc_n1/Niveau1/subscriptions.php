@@ -31,17 +31,9 @@ include './scripts/connexion.php';
             $query = "SELECT photo FROM photos WHERE user = '$currentId'";
             $lesInfos = $mysqli->query($query);
             $nomPhoto = $lesInfos->fetch_assoc();
-            if (!isset ($nomPhoto)){
-                ?>
-                    <img src="./photos/user.jpg" alt="" />
-                    
-                <?php
-                } else {
-                ?>
-                    <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="Portrait de l'utilisateurice" />
-                <?php
-                }
-                ?>
+            ?>
+
+            <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="Portrait de l'utilisateurice" />
 
             <section>
                 <h3>Présentation</h3>
@@ -75,23 +67,15 @@ include './scripts/connexion.php';
                     $selectPhoto = "SELECT photo FROM photos WHERE user='$postId'";
                     $RecupInfos = $mysqli->query($selectPhoto);
                     $nomPhoto = $RecupInfos->fetch_assoc();
-                    if (!isset ($nomPhoto)){
-                        ?>
-                                <img src="./photos/user.jpg" alt="" />
-                            
-                                <?php
-                                } else {
-                                ?>
-                                 <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="./photos/user.jpg" />
-                                <?php
-                                }
-                        ?>
+                    ?>
+
+                    <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="Portrait de l'utilisateurice" />
                     <h3>
                         <a href="wall.php?user_id=<?php echo $post['id'] ?>"> <?php echo $post['alias'] ?> </a></time>
                     </h3>
                     <footer>
                         <form method="post" action="./scripts/abonnements.php?wall_id=<?php echo $post['id'] ?> ">
-                            <button type="submit">Se désabonner</button>
+                            <button type="submit" class="btn-style">Se désabonner</button>
                         </form>
                     </footer>
                 </article>

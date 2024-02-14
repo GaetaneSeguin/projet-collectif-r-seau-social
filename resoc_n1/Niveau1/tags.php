@@ -36,17 +36,17 @@ include './templates/header.php'
             $query = "SELECT photo FROM photos WHERE user = '$currentId'";
             $lesInfos = $mysqli->query($query);
             $nomPhoto = $lesInfos->fetch_assoc();
-            if (!isset ($nomPhoto)){
-                ?>
-                    <img src="./photos/user.jpg" alt="" />
-                    
-                <?php
-                } else {
-                ?>
-                    <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="Portrait de l'utilisateurice" />
-                <?php
-                }
-                ?>
+            if (!isset($nomPhoto)) {
+            ?>
+                <img src="./photos/user.jpg" alt="" />
+
+            <?php
+            } else {
+            ?>
+                <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="Portrait de l'utilisateurice" />
+            <?php
+            }
+            ?>
 
             <section>
                 <h3>Présentation</h3>
@@ -92,7 +92,7 @@ include './templates/header.php'
                     </h3>
                     <address><?php echo $post['author_name'] ?></address>
                     <div>
-                        <p><?php echo $post['content'] ?></p>
+                        <p class="has-dropcap"><?php echo $post['content'] ?></p>
                     </div>
                     <footer>
 
@@ -102,7 +102,6 @@ include './templates/header.php'
                         foreach ($hastag as $tag) {
                             list($tagId, $label) = explode(':', $tag)
                         ?>
-
                             <a href="tags.php?tag_id=<?php echo $tagId ?>"> <?php echo  '#' . $label . " "  ?></a>
                         <?php
                         } ?>

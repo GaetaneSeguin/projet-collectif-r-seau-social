@@ -39,17 +39,17 @@ include './scripts/connexion.php';
             $query = "SELECT photo FROM photos WHERE user = '$currentId'";
             $lesInfos = $mysqli->query($query);
             $nomPhoto = $lesInfos->fetch_assoc();
-            if (!isset ($nomPhoto)){
-                ?>
-                    <img src="./photos/user.jpg" alt="" />
-                    
-                <?php
-                } else {
-                ?>
-                    <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="Portrait de l'utilisateurice" />
-                <?php
-                }
-                ?>
+            if (!isset($nomPhoto)) {
+            ?>
+                <img src="./photos/user.jpg" alt="" />
+
+            <?php
+            } else {
+            ?>
+                <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="Portrait de l'utilisateurice" />
+            <?php
+            }
+            ?>
 
             <section>
                 <h3>Présentation</h3>
@@ -61,13 +61,13 @@ include './scripts/connexion.php';
                     if (!$follow) {
                 ?>
                         <form method="post" action="./scripts/abonnements.php?wall_id=<?php echo $wallUserId ?> ">
-                            <button type="submit">S'abonner</button>
+                            <button type="submit" class="btn-style">S'abonner</button>
                         </form>
                     <?php
                     } else {
                     ?>
                         <form method="post" action="./scripts/abonnements.php?wall_id=<?php echo $wallUserId ?> ">
-                            <button type="submit">Se désabonner</button>
+                            <button type="submit" class="btn-style">Se désabonner</button>
                         </form>
                 <?php
                     }
@@ -111,7 +111,7 @@ include './scripts/connexion.php';
                     </h3>
                     <address>par <?php echo $post['author_name'] ?></address>
                     <div>
-                        <p><?php echo $post['content'] ?></p>
+                        <p class="has-dropcap"><?php echo $post['content'] ?></p>
                     </div>
                     <footer>
 
@@ -127,11 +127,11 @@ include './scripts/connexion.php';
                         <?php
                             }
                         }
-                        
+
                         ?>
                         <form action="./scripts/suppressionArticle.php">
-                        <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
-                            <button type ="submit">Suppression</button>
+                            <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
+                            <button type="submit" class="btn-style">Suppression</button>
                         </form>
                     </footer>
                 </article>
@@ -198,7 +198,7 @@ include './scripts/connexion.php';
                             <dt><label for='message'>Message</label></dt>
                             <dd><textarea name='message'></textarea></dd>
                         </dl>
-                        <input type='submit'>
+                        <button type='submit' class="btn-style">Envoyer</button>
                     </form>
                 </article>
             <?php

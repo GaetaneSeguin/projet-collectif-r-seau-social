@@ -41,17 +41,10 @@ include './scripts/connexion.php';
             $query = "SELECT photo FROM photos WHERE user = '$currentId'";
             $lesInfos = $mysqli->query($query);
             $nomPhoto = $lesInfos->fetch_assoc();
-            if (!isset ($nomPhoto)){
             ?>
-                <img src="./photos/user.jpg" alt="" />
-                
-            <?php
-            } else {
-            ?>
-                <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="./photos/user.jpg" />
-            <?php
-            }
-            ?>
+
+            <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="Portrait de l'utilisateurice" />
+
             <section>
                 <h3>Présentation</h3>
                 <p>Sur cette page vous trouverez tous les message des utilisateurices
@@ -97,7 +90,7 @@ include './scripts/connexion.php';
                     </h3>
                     <address><a href="wall.php?user_id=<?php echo $post['user_id'] ?>"> <?php echo $post['author_name'] ?> </a></address>
                     <div>
-                        <p><?php echo $post['content'] ?></p>
+                        <p class="has-dropcap"><?php echo '<span class="has-dropcap">' . $post['content'] ?></p>
 
                     </div>
                     <footer>

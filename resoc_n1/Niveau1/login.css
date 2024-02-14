@@ -1,0 +1,156 @@
+@import url("https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap");
+* {
+  box-sizing: border-box;
+  font-family: "MedievalSharp", cursive;
+}
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+body {
+  background-image: url(paysage-friche-bleu-froid-lune-visibles-depuis-grotte-ai-generative_720.jpg);
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;  height: 100%;
+}
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+  margin: 0 auto;
+  padding: 1em;
+  width: 80%;
+  height: 100%;
+}article,
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+}
+article {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 4em;
+  border-radius: 1em;
+  box-shadow: 0 0 1em 0.5em #000;
+}
+article h1 {
+  font-size: 3em;
+  color: #000;
+}form label {
+  font-size: 2em;
+  color: #000;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-transition: "color 9999s ease-out, background-color 9999s ease-out";
+  -webkit-transition-delay: 9999s;
+}
+form input {
+  background: none;
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 0.1em solid #000;
+  border-radius: 0.5em;
+  font-size: 1.5em;
+  color: #fff;
+  padding: 0.5em;
+}
+form input::placeholder {
+  color: #fff;
+  font-size: 0.7em;
+  opacity: 0.2;
+}
+form input:focus {
+  outline: none;
+  border: 0.1em solid #fff;
+}
+p a {
+  margin-left: 0.5em;
+  text-decoration: none;
+  color: #000;
+}
+p a:hover {
+  text-decoration: underline;
+  cursor: pointer;
+  color: red;
+}.btn-style {
+  position: relative;
+  border: 0.05em solid #000;
+  border-radius: 0.5em;
+  background: none;
+  cursor: pointer;
+  font-size: 1.5em;
+  color: #000;
+  padding: 0.5em;
+  overflow: hidden;
+  font-family: "MedievalSharp", cursive;
+}
+.btn-style::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  transition: left 1s ease;
+  z-index: -1;
+}.btn-style:hover::after {
+  left: 0;
+}
+.btn-style:hover {
+  color: #fff;
+  z-index: 1;
+}
+#confirmationMessage {
+  color: #fff;
+  font-size: 2em;
+  text-align: center;
+}/* Styles pour les écrans de tablette */
+@media (max-width: 768px) {
+  body {
+    background-position: center top; /* Centre l'image de fond horizontalement et l'aligne en haut */
+  }
+  main {
+    width: 90%;
+  }  article,
+  form {
+    padding: 2em;
+    height: 80%;
+    gap: 0.5em;
+  }  article h1,
+  form label {
+    font-size: 2em;
+  }  form input {
+    font-size: 1em;
+  }  .btn-style {
+    font-size: 0.8em;
+  }
+}/* Styles pour les écrans de téléphone */
+@media (max-width: 480px) {
+  body {
+    background-position: top left; /* Aligne l'image de fond en haut à gauche */
+  }
+  main {
+    width: 100%;
+  }  article,
+  form {
+    padding: 1em;
+    height: 60%;
+  }  article h1,
+  form label {
+    font-size: 1.5em;
+  }  form input {
+    font-size: 0.8em;
+  }  .btn-style {
+    font-size: 0.7em;
+  }
+}

@@ -22,17 +22,17 @@ include './scripts/connexion.php';
             $query = "SELECT photo FROM photos WHERE user = '$currentId'";
             $lesInfos = $mysqli->query($query);
             $nomPhoto = $lesInfos->fetch_assoc();
-            if (!isset ($nomPhoto)){
-                ?>
-                    <img src="./photos/user.jpg" alt="" />
-                    
-                <?php
-                } else {
-                ?>
-                    <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="./photos/user.jpg" />
-                <?php
-                }
-                ?>
+            if (!isset($nomPhoto)) {
+            ?>
+                <img src="./photos/user.jpg" alt="" />
+
+            <?php
+            } else {
+            ?>
+                <img src="./photos/<?php echo $nomPhoto['photo'] ?>" alt="./photos/user.jpg" />
+            <?php
+            }
+            ?>
 
             <section>
                 <h3>Présentation </h3>
@@ -61,7 +61,7 @@ include './scripts/connexion.php';
                     users.alias as author_name,  
                     users.id as user_id,
                     count(likes.id) as like_number,  
-                    GROUP_CONCAT(DISTINCT tags.label) AS taglist 
+                    GROUP_CONCAT(tags.id, ':' ,tags.label) AS taglist 
                     FROM posts
                     JOIN users ON  users.id=posts.user_id
                     LEFT JOIN posts_tags ON posts.id = posts_tags.post_id  
@@ -90,13 +90,22 @@ include './scripts/connexion.php';
                     </h3>
                     <address><a href="wall.php?user_id=<?php echo $post['user_id'] ?>"> <?php echo $post['author_name'] ?> </a></address>
                     <div>
-                        <p><?php echo $post['content'] ?></p>
+                        <p class="has-dropcap"><?php echo $post['content'] ?></p>
                     </div>
                     <footer>
                         <?php include './scripts/buttonLikes.php' ?>
-                        <a href=""><?php $hastag = explode(",", $post['taglist']);
-                                    foreach ($hastag as $tag)
-                                        echo  '#' . $tag . " " ?></a>
+                        <?php
+                        $hastag = explode(",", $post['taglist']);
+                        if (!empty($hastag[0])) {
+                            foreach ($hastag as $tag) {
+                                list($tagId, $label) = explode(':', $tag)
+                        ?>
+                                <a href="tags.php?tag_id=<?php echo $tagId ?>"> <?php echo  '#' . $label . " "  ?></a>
+                        <?php
+                            }
+                        }
+
+                        ?>
                     </footer>
                 </article>
             <?php
