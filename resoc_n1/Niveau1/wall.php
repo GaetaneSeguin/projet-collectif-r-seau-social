@@ -36,7 +36,7 @@ include './scripts/connexion.php';
             ?>
 
             <?php
-            $query = "SELECT photo FROM photos WHERE user = '$currentId'";
+            $query = "SELECT photo FROM photos WHERE user = '$wallUserId'";
             $lesInfos = $mysqli->query($query);
             $nomPhoto = $lesInfos->fetch_assoc();
             if (!isset($nomPhoto)) {
@@ -123,15 +123,15 @@ include './scripts/connexion.php';
                                 list($tagId, $label) = explode(':', $tag)
                         ?>
                                 <a href="tags.php?tag_id=<?php echo $tagId ?>"> <?php echo  '#' . $label . " "  ?></a>
-                        <?php
+                            <?php
                             }
                         }
- 
+
                         if ($wallUserId == $currentId) { ?>
-                        <form action="./scripts/suppressionArticle.php">
-                            <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
-                            <button type="submit" class="btn-style">Suppression</button>
-                        </form>
+                            <form action="./scripts/suppressionArticle.php">
+                                <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
+                                <button type="submit" class="btn-style">Suppression</button>
+                            </form>
                         <?php } ?>
                     </footer>
                 </article>
